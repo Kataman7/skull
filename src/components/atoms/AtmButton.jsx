@@ -1,4 +1,4 @@
-const Button = ({ label, onClick, disabled }) => {
+const AtmButton = ({ label, onClick, disabled }) => {
   return (
     <button
       onClick={onClick}
@@ -7,7 +7,7 @@ const Button = ({ label, onClick, disabled }) => {
     >
       {label}
     </button>
-  );
+  )
 }
 
-export default Button;
+export default AtmButton

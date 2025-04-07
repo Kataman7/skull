@@ -1,9 +1,15 @@
-import Home from '../pages/Home';
-import CounterPage from '../pages/CounterPage';
+import React from 'react'
+import { Routes, Route } from 'react-router-dom'
+import Home from '../pages/Home'
+import CounterPage from '../pages/CounterPage'
 
-const routes = [
-  { path: '/', element: <Home /> },
-  { path: '/counter/:value?', element: <CounterPage /> },
-];
+const AppRoutes = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/counter/:value?" element={<CounterPage />} />
+    </Routes>
+  )
+}
 
-export default routes;
+export default AppRoutes
