@@ -1,0 +1,1 @@
+//Ce fichier contient des fonctions pour obtenir les données des produits depuis l’API.

@@ -1,0 +1,1 @@
+//Ce fichier centralise la configuration des requêtes API.
