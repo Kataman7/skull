@@ -1,5 +1,5 @@
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber"
+import { OrbitControls } from "@react-three/drei"
 
 const ThreeOrgScene = ({ children }) => {
   return (
@@ -11,7 +11,7 @@ const ThreeOrgScene = ({ children }) => {
         <OrbitControls />
       </Canvas>
     </div>
-  );
-};
+  )
+}
 
-export default ThreeOrgScene;
+export default ThreeOrgScene

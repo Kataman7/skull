@@ -1,1 +1,0 @@
-//Ce fichier gère les actions qui modifient les produits.

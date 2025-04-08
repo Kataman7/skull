@@ -1,5 +1,4 @@
 import ThreeAtmCharacter from '../components/atoms/ThreeAtmCharacter'
-import ThreeAtmCube from '../components/atoms/ThreeAtmCube'
 import ThreeOrgScene from '../components/organisms/ThreeOrgScene'
 
 const PagCharacter = () => {
