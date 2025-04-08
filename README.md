@@ -57,3 +57,14 @@ src/
 ├── .env.local  # Variables d’environnement  
 ├── .gitignore  # Fichiers à ignorer par Git  
 ├── package.json  # Dépendances et scripts npm
+
+
+
+
+Conventions de nommage par niveau
+Niveau	Trigramme	Exemples
+Atoms	Atm	AtmButton, AtmInput
+Molecules	Mol	MolCounter, MolSearchBar
+Organisms	Org	OrgNavbar, OrgThreeScene
+Templates	Tmp	TmpDashboard, TmpArticle
+Pages	Pag	PagHome, PagProfile

@@ -4,7 +4,7 @@ import { counterActions } from '../lib/store/slices/counterSlice.js'
 import { useParams } from 'react-router-dom'
 import MolCounter from '../components/molecules/MolCounter.jsx'
 
-const CounterPage = () => {
+const PagCounters = () => {
   const storeCount = useSelector(state => state.counter.value)
   const [useStateCount, setUseStateCount] = useState(storeCount)
   const dispatch = useDispatch()
@@ -42,4 +42,4 @@ const CounterPage = () => {
   )
 }
 
-export default CounterPage
+export default PagCounters

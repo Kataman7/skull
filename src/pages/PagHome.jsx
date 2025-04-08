@@ -1,4 +1,4 @@
-const Home = () => {
+const PagHome = () => {
     return (
         <div>
         <h1>Welcome to the Home Page</h1>
@@ -7,4 +7,4 @@ const Home = () => {
     )
 }
 
-export default Home
+export default PagHome
