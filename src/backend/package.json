@@ -13,7 +13,14 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "mysql2": "^3.14.0"
+    "install": "^0.13.0",
+    "mysql2": "^3.14.0",
+    "randomcolor": "^0.6.2",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/randomcolor": "^0.5.9",
+    "ts-node": "^10.9.2"
   }
-
 }

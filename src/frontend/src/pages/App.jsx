@@ -1,15 +1,17 @@
 import React from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import AppRoutes from '../routes/routes'
+import { SocketProvider } from '../lib/contexts/SocketContext'
 
 const App = () => {
   return (
-    <Router>
-      <div>
-        <h1>Mon Application</h1>
-        <AppRoutes />
-      </div>
-    </Router>
+    <SocketProvider>
+      <Router>
+        <div>
+          <AppRoutes />
+        </div>
+      </Router>
+    </SocketProvider>
   )
 }
 
