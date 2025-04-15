@@ -55,7 +55,7 @@ class Board {
             if (this.betValue === this.computeBetMaxValue()) {
                 do {
                     Board.currentTurn = (Board.currentTurn + 1) % Board.players.length;
-                } while (Board.players[Board.currentTurn].name === Board.betPlayer?.name);
+                } while (Board.players[Board.currentTurn].name !== Board.betPlayer?.name);
             }
             else {
                 do {

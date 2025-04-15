@@ -10,6 +10,7 @@ const MolPlayersList = () => {
             label='Players'
             emptyMsg='no players found'
             items={board.players.map(player => player.name)}
+            maxHeight='150px'
         />
     )
 }
