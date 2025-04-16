@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 const retroTvStyle = {
     width: '313px',
     height: '255px',
-    backgroundColor: '#fffaf0', // Couleur sépia
+    backgroundColor: '#ffffff', // Couleur sépia
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
