@@ -8,10 +8,7 @@ import PagCharacter from '../pages/PagCharacter'
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<PagHome />} />
-      <Route path="/counter/:value?" element={<PagCounters />} />
-      <Route path="/cube" element={<PagCubes />} />
-      <Route path="/character" element={<PagCharacter />} />
+      <Route path="/" element={<PagCharacter />} />
     </Routes>
   )
 }

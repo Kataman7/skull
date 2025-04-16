@@ -1,11 +1,9 @@
 import express from "express";
 import http from "http";
 import { Server } from "socket.io";
-import randomColor from 'randomcolor';
 import Board from "./src/Board";
 import Player from "./src/Player";
 import Utils from "./src/Utils";
-import { ActionType } from "./src/Types";
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -19,13 +17,19 @@ io.on("connection", (socket) => {
   socket.emit('log', 'Connection successful.');
 
   socket.on('join', (playerName, playerID) => {
-    
+
     if (!playerName || typeof playerName !== 'string' || playerName.trim() === '') {
       socket.emit('error', 'Invalid player name.');
       return;
     }
 
-    const player = new Player(playerID, playerName.trim(), "Clown");
+    const character = Board.removeRandomCharacter();
+    if (character === '') {
+      socket.emit('error', 'The game is full.');
+      return;
+    }
+
+    const player = new Player(playerID, playerName.trim(), character);
     try {
       Board.addPlayer(player);
       io.emit('board', Board.getPublicData());
@@ -67,7 +71,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on('bet', (playerID, betValue) =>{
+  socket.on('bet', (playerID, betValue) => {
     if (typeof betValue !== 'number' || betValue <= 0) {
       socket.emit('error', 'Invalid bet value.');
       return;
@@ -80,15 +84,12 @@ io.on("connection", (socket) => {
     }
 
     try {
-      if (betValue <= Board.betValue) {
-        if (playerID === Board.players[Board.currentTurn]?.id) {
-          player.skip = true;
-          io.emit('log', `${player.name} is not following the bet.`);
-        }
-      }
-      else {
-        player.bet(betValue);
+      const isBetting = player.bet(betValue);
+      if (isBetting) {
         io.emit('log', `${player.name} bet ${betValue}`);
+      } else {
+        player.skip = true;
+        io.emit('log', `${player.name} is not following the bet.`);
       }
       Board.playTurn();
       io.emit('board', Board.getPublicData());
@@ -114,9 +115,14 @@ io.on("connection", (socket) => {
     }
 
     try {
-      player.pick(playerName.trim());
-      io.emit('log', `${player.name} chose ${playerName}'s card.`);
-      Board.playTurn();
+      const succed = player.pick(playerName.trim());
+      if (succed)
+        io.emit('log', `${player.name} picks ${playerName}'s card.`);
+      else
+        io.emit('log', `${player.name} picks ${playerName}'s skull card.`);
+      const gameOver = Board.playTurn();
+      if (gameOver)
+        io.emit('log', `${Board.winner?.name} wins the game.`);
       io.emit('board', Board.getPublicData());
     } catch (error) {
       if (error instanceof Error) {
@@ -134,12 +140,29 @@ io.on("connection", (socket) => {
       io.emit('log', `${playerName} has left the game.`);
     } catch (error) {
       if (error instanceof Error) {
-        socket.emit('error', error.message);
+        console.log('error', error.message);
       } else {
         socket.emit('error', 'An unknown error has occurred.');
       }
     }
   });
+
+  socket.on("requestHand", (playerID) => {
+
+    const player = Utils.getPlayerById(playerID);
+    if (!player) {
+      socket.emit('error', 'Player not found.');
+      return;
+    }
+
+    const data = {
+      playerID: playerID,
+      cards: player.hand,
+    }
+
+    socket.emit("hand", data);
+  });
+
 });
 
 server.listen(3001, () => console.log("Server running on 3001"));

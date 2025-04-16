@@ -27,6 +27,10 @@ class Player {
   }
 
   playCard(handIndex: number): void {
+
+    if (Board.players.length < 2)
+      throw new Error('Not enough players to play.');
+
     if (Board.betValue > 0)
       throw new Error('You cannot play a card after betting.');
 
@@ -41,7 +45,7 @@ class Player {
     Board.lastAction = ActionType.PlayCard;
   }
 
-  bet(betValue: number): void {
+  bet(betValue: number): boolean {
     if (!this.isPlayerTurn())
       throw new Error('Not your turn to play.');
 
@@ -55,7 +59,9 @@ class Player {
       Board.betValue = betValue;
       Board.betPlayer = this;
       Board.lastAction = ActionType.Bet;
+      return true;
     }
+    return false;
   }
 
   looseCard(): void {
@@ -71,7 +77,12 @@ class Player {
     Board.resetPlayersSkip();
   }
 
-  pick(playerName: string): void {
+  recoveringDeck(): void {
+    this.hand.push(...this.deck);
+    this.deck = [];
+  }
+
+  pick(playerName: string): boolean {
     if (!this.isPlayerTurn())
       throw new Error('Not your turn to play');
 
@@ -93,11 +104,21 @@ class Player {
     if (pickedCard === CardType.Flower) {
       Board.betValue -= 1;
       Board.lastAction = ActionType.Pick;
+      return true;
     }
     else {
       this.looseCard();
       Board.betPlayer = null;
       Board.currentTurn -= 1;
+      Board.betValue = 0;
+      Board.lastAction = ActionType.Pick;
+      Board.resetPlayersSkip();
+
+      Board.players.forEach(player => {
+        player.recoveringDeck();
+      });
+
+      return false;
     }
   }
 }

@@ -1,30 +1,12 @@
 import { useEffect, useState } from "react"
 import { useSocketContext } from "../../lib/contexts/SocketContext"
 import { getPlayerPositionsAndRotations } from "../../lib/helpers/utils"
-import ThreeAtmCharacter from "../atoms/ThreeAtmCharacter"
 import ThreeAtmModel from "../atoms/ThreeAtmModel"
 import ThreeAtmSpotLight from "../atoms/ThreeAtmSpotLight"
 import ThreeMolCards from "./ThreeMolCards"
 import { useDispatch } from "react-redux"
 import { playerActions } from "../../lib/store/slices/playerSlice"
-
-const names = [
-    'Character_01',
-    'Character_02',
-    'Character_03',
-    'Character_04',
-    'Character_05',
-    'Character_06',
-    'Character_07',
-    'Character_08',
-    'Character_09',
-    'Killer',
-    'Killer_01',
-    'Man_Pot',
-    'Mr_Smiles',
-    'Blender_Head',
-    'Creature',
-]
+import ThreeAtmCharacter from "../atoms/ThreeAtmCharacter"
 
 const ThreeMolPlayers = () => {
     // ✅ TOUS les hooks d'abord, avant toute condition
@@ -63,16 +45,17 @@ const ThreeMolPlayers = () => {
                 intensity={5000}
                 angle={Math.PI / 65}
                 distance={100}
-                coneOpacity={0.03}
+                coneOpacity={0.11}
                 penumbra={0.4}
             />
             {playerData.map((data, index) => (
-                <ThreeAtmModel
+                <ThreeAtmCharacter
                     key={index}
                     folder={'characters'}
-                    name={names[index]}
+                    name={board.players[index].character}
                     position={data.position}
                     rotation={data.rotation}
+                    point={board.players[index].point}
                 />
             ))}
             {cardData.map((data, index) => (

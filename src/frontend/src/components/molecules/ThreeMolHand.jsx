@@ -4,28 +4,41 @@ import { checkIfPlayerTurn, getPlayerPositionsAndRotations } from "../../lib/hel
 import ThreeAtmCard from "../atoms/ThreeAtmCard"
 import { useEffect, useRef, useState } from "react"
 
-const ThreeMolHand = ({
-}) => {
-
-    const { board, playCard } = useSocketContext()
+const ThreeMolHand = () => {
+    const { board, playCard, requestHand, hand } = useSocketContext()
     const [displayHand, setDisplayHand] = useState(false)
+    const [playerCards, setPlayerCards] = useState([]) // ✅ Initialisation avec un tableau vide
+    const groupRef = useRef()
+
+    // Données du joueur
+    const playerName = useSelector((state) => state.player.name)
 
     useEffect(() => {
-
         if (board &&
             board.betPlayer?.name === board.currentPlayer?.name &&
             board.betValue === 0
-        ) setDisplayHand(true)
+        ) {
+            requestHand()
+            setDisplayHand(true)
+        }
         else setDisplayHand(false)
+    }, [board, requestHand])
 
-    }, [board])
+    useEffect(() => {
+        // ✅ Vérification que hand n'est pas null/undefined
+        if (hand) {
+            setPlayerCards(hand)
+            console.log('hand', hand)
+        }
+    }, [hand])
 
+    // ✅ Retour précoce si les conditions ne sont pas remplies
     if (!board || !board.players) return null
-
-    const playerName = useSelector((state) => state.player.name)
+    
     const player = board.players.find(player => player.name === playerName)
-    const groupRef = useRef()
-
+    
+    // ✅ Vérification supplémentaire pour player
+    if (!player) return null
     if (!checkIfPlayerTurn(board, playerName)) return null
 
     const datas = getPlayerPositionsAndRotations(board.players.length, 1.7)
@@ -35,8 +48,10 @@ const ThreeMolHand = ({
 
     const cards = [];
 
-    for (let i = 0; i < player.hand; i++) {
+    // ✅ Vérification que player.hand est un nombre valide
+    const handSize = typeof player.hand === 'number' && player.hand > 0 ? player.hand : 0;
 
+    for (let i = 0; i < handSize; i++) {
         const handleClick = () => {
             playCard(i)
         }
@@ -44,12 +59,14 @@ const ThreeMolHand = ({
         cards.push(
             <ThreeAtmCard
                 key={i}
-                position={[-player.hand * 0.2 + i * 0.5, 0, 0]}
+                position={[-handSize * 0.2 + i * 0.53, 0, 0]}
                 width={0.5}
                 height={0.08}
                 handleClick={handleClick}
                 isTopCylinder={true}
                 rotation={[2.8, 0, 0]}
+                // ✅ Vérification des limites du tableau
+                type={playerCards && i < playerCards.length ? playerCards[i] : null}
             />
         )
     }

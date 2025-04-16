@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 function AtmVolumeSlider() {
-  const [volume, setVolume] = useState(0.4); // volume de 0 à 1
+  const [volume, setVolume] = useState(0); // volume de 0 à 1
 
   useEffect(() => {
     const audio = document.getElementById("global-audio");

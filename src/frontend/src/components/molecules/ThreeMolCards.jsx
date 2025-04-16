@@ -6,8 +6,6 @@ import ThreeAtmCard from '../atoms/ThreeAtmCard'
 import { useSocketContext } from '../../lib/contexts/SocketContext'
 
 const ThreeMolCards = ({
-  type = 1,
-  color = '#ff3e00',
   position = [0, 2, 0],
   width = 0.5,
   height = 0.08,
@@ -45,7 +43,6 @@ const ThreeMolCards = ({
         radialSegment={12}
         isTopCylinder={isTopCylinder}
         handleClick={isTopCylinder ? handleClick : undefined}
-        color={color}
       />
     )
   }

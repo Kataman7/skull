@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Color } from 'three'
+import { useState, useEffect } from 'react'
+import { Color, TextureLoader } from 'three'
 
 const ThreeAtmCard = ({
     position = [0, 0, 0],
@@ -8,13 +8,15 @@ const ThreeAtmCard = ({
     radialSegment = 12,
     isTopCylinder = false,
     handleClick = () => {},
-    color = '#ff3e00',
+    color = '#730000',
     rotation = [0, 0, 0],
+    type = 'flower',
 }) => {
 
     const [hovered, setHovered] = useState(false)
-    const cardColor = new Color(color)
-    const hoverColor = new Color(color).multiplyScalar(1.5)
+    const redOrBlack = type === 'skull' ? '#005000' : color
+    const cardColor = new Color(redOrBlack)
+    const hoverColor = new Color(redOrBlack).multiplyScalar(1.5)
 
     return (
         <mesh
@@ -22,7 +24,6 @@ const ThreeAtmCard = ({
             rotation={rotation}
             castShadow
             receiveShadow
-            // Événements interactifs uniquement pour le cylindre du haut
             onClick={isTopCylinder ? handleClick : undefined}
             onPointerOver={isTopCylinder ? () => setHovered(true) : undefined}
             onPointerOut={isTopCylinder ? () => setHovered(false) : undefined}
@@ -30,7 +31,7 @@ const ThreeAtmCard = ({
             onPointerLeave={isTopCylinder ? () => document.body.style.cursor = 'default' : undefined}
         >
             <cylinderGeometry args={[width / 2, width / 2, height, radialSegment]} />
-            <meshStandardMaterial 
+            <meshStandardMaterial
                 color={hovered ? hoverColor : cardColor}
                 roughness={0.7}
                 metalness={0.3}

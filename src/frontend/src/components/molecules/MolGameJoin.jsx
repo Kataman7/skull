@@ -21,7 +21,6 @@ const MolGameJoin = () => {
     inGame ? null :
 
     <div>
-      <h2 className="text-xl mb-4">Join the game</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="playerName" className="block mb-2">Player's name</label>
@@ -35,7 +34,7 @@ const MolGameJoin = () => {
           />
         </div>
         <AtmButton 
-          label="Rejoindre" 
+          label="Join the game" 
           onClick={handleSubmit} 
           disabled={!connected || !name.trim()}
         />

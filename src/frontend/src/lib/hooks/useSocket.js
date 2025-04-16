@@ -10,6 +10,7 @@ export const useSocket = () => {
   const [connected, setConnected] = useState(false);
   const [board, setBoard] = useState(null);
   const [error, setError] = useState(null);
+  const [hand, setHand] = useState(null);
   const socketRef = useRef(null);
   const dispatch = useDispatch()
   const playerID = useSelector((state) => state.player.id)
@@ -55,6 +56,13 @@ export const useSocket = () => {
       dispatch(logsActions.addMessage(message));
     });
 
+    socketRef.current.on('hand', (data) => {
+      if (data.playerID === playerID) {
+        setHand(data.cards);
+        console.log('Received hand:', data.cards);
+      }
+    })
+
     // Nettoyage lors du démontage du composant
     return () => {
       socketRef.current.disconnect();
@@ -82,14 +90,20 @@ export const useSocket = () => {
     socketRef.current.emit('pick', playerID, playerName);
   }, []);
 
+  const requestHand = useCallback(() => {
+    socketRef.current.emit('requestHand', playerID);
+  }, []);
+
   return {
     connected,
     board,
     error,
+    hand,
     joinGame,
     leaveGame,
     playCard,
     placeBet,
     pickPlayer,
+    requestHand,
   };
 };

@@ -8,6 +8,35 @@ class Board {
     static betPlayer: Player | null = null;
     static lastAction: ActionType | null = null;
     static winner: Player | null = null;
+    
+    static characters: string[] = [
+        'Character',
+        'Character_01',
+        'Character_02',
+        'Character_03',
+        'Character_04',
+        'Character_05',
+        'Character_06',
+        'Character_07',
+        'Character_08',
+        'Character_09',
+        'Killer',
+        'Killer_01',
+        'Man_Pot',
+        'Mr_Smiles',
+        'Blender_Head',
+        'Creature',
+    ]
+
+    static removeRandomCharacter(): string {
+        if (this.characters.length === 0) {
+            return ''
+        }
+        const randomIndex = Math.floor(Math.random() * this.characters.length);
+        const character = this.characters[randomIndex];
+        this.characters.splice(randomIndex, 1);
+        return character;
+    }
 
     static computeBetMaxValue(): number {
         let maxBet = 0;
@@ -27,7 +56,19 @@ class Board {
     }
 
     static isGameOver(): boolean {
-        return this.betValue === 0 && this.betPlayer !== null;
+        if (this.betValue === 0 && this.betPlayer !== null) {
+            if (this.betPlayer.point > 0) return true
+
+            this.betPlayer.point++
+            this.betPlayer = null
+            this.resetPlayersSkip()
+            this.players.forEach(player => {
+                player.recoveringDeck()
+            });
+            this.currentTurn--
+
+        }
+        return false
     }
 
     static resetBoard(): void {
@@ -40,7 +81,7 @@ class Board {
     }
 
 
-    static playTurn(): void {
+    static playTurn(): boolean {
         if (Board.players.length === 0) {
             throw new Error('No players in the game.');
         }
@@ -50,9 +91,10 @@ class Board {
             this.resetBoard();
             Board.lastAction = ActionType.GameOver;
             Board.winner = winner;
+            return true;
         }
         else {
-            if (this.betValue === this.computeBetMaxValue()) {
+            if (this.betValue === this.computeBetMaxValue() && this.betPlayer) {
                 do {
                     Board.currentTurn = (Board.currentTurn + 1) % Board.players.length;
                 } while (Board.players[Board.currentTurn].name !== Board.betPlayer?.name);
@@ -63,6 +105,7 @@ class Board {
                 } while (Board.players[Board.currentTurn].skip);
             }
         }
+        return false;
     }
 
     static getPublicData(): object {
@@ -72,6 +115,8 @@ class Board {
                 name: player.name,
                 deck: player.deck.length,
                 hand: player.hand.length,
+                character: player.character,
+                point: player.point,
             })),
             currentTurn: Board.currentTurn,
             betValue: Board.betValue,
@@ -99,6 +144,7 @@ class Board {
         }
 
         const playerName = Board.players[playerIndex].name;
+        Board.characters.push(Board.players[playerIndex].character);
 
         // Supprimer le joueur
         Board.players.splice(playerIndex, 1);
