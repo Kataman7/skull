@@ -75,6 +75,10 @@ class Player {
     this.hand.splice(randomIndex, 1);
     Board.lastAction = ActionType.LooseCard;
     Board.resetPlayersSkip();
+
+    if (this.hand.length === 0) {
+      Board.removePlayer(this.id);
+    }
   }
 
   recoveringDeck(): void {

@@ -8,13 +8,13 @@ const ThreeAtmCard = ({
     radialSegment = 12,
     isTopCylinder = false,
     handleClick = () => {},
-    color = '#730000',
+    color = '#ffffff',
     rotation = [0, 0, 0],
     type = 'flower',
 }) => {
 
     const [hovered, setHovered] = useState(false)
-    const redOrBlack = type === 'skull' ? '#005000' : color
+    const redOrBlack = type === 'skull' ? '#ff0000' : color
     const cardColor = new Color(redOrBlack)
     const hoverColor = new Color(redOrBlack).multiplyScalar(1.5)
 

@@ -34,7 +34,7 @@ const ThreeOrgScene = () => {
         />
 
         <ThreeAtmFloor />
-        <ambientLight intensity={2} />
+        <ambientLight intensity={0.2} />
         <directionalLight position={[5, 5, 5]} intensity={0.6} />
         <ThreeAtmSpotLight
           position={[0, 25, 0]}
