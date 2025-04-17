@@ -1,3 +1,4 @@
+import Character, { CharacterFactory } from "./Character";
 import Player from "./Player";
 import { ActionType } from "./Types";
 
@@ -8,29 +9,12 @@ class Board {
     static betPlayer: Player | null = null;
     static lastAction: ActionType | null = null;
     static winner: Player | null = null;
-    
-    static characters: string[] = [
-        'Character',
-        'Character_01',
-        'Character_02',
-        'Character_03',
-        'Character_04',
-        'Character_05',
-        'Character_06',
-        'Character_07',
-        'Character_08',
-        'Character_09',
-        'Killer',
-        'Killer_01',
-        'Man_Pot',
-        'Mr_Smiles',
-        'Blender_Head',
-        'Creature',
-    ]
 
-    static removeRandomCharacter(): string {
+    static characters: Character[] = CharacterFactory();
+
+    static removeRandomCharacter(): Character | null {
         if (this.characters.length === 0) {
-            return ''
+            return null
         }
         const randomIndex = Math.floor(Math.random() * this.characters.length);
         const character = this.characters[randomIndex];
@@ -115,8 +99,9 @@ class Board {
                 name: player.name,
                 deck: player.deck.length,
                 hand: player.hand.length,
-                character: player.character,
+                character: player.character.name,
                 point: player.point,
+                color: player.character.color,
             })),
             currentTurn: Board.currentTurn,
             betValue: Board.betValue,

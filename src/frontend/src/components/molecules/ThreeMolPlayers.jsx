@@ -64,6 +64,7 @@ const ThreeMolPlayers = () => {
                     position={data.position}
                     name={board.players[index].name}
                     amount={board.players[index].deck}
+                    color={board.players[index].color}
                 />
             ))}
         </>

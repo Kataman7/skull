@@ -65,7 +65,7 @@ const ThreeMolHand = () => {
                 handleClick={handleClick}
                 isTopCylinder={true}
                 rotation={[2.8, 0, 0]}
-                // ✅ Vérification des limites du tableau
+                color={player.color}
                 type={playerCards && i < playerCards.length ? playerCards[i] : null}
             />
         )

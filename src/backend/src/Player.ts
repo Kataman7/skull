@@ -1,21 +1,20 @@
 import randomColor from 'randomcolor';
 import Board from './Board';
 import { ActionType, CardType } from './Types';
+import Character from './Character';
 
 class Player {
   id: string;
   name: string;
-  color: string;
   hand: CardType[];
   deck: CardType[];
   point: number;
-  character: string;
   skip: boolean = false;
+  character: Character;
 
-  constructor(id: string, name: string, character: string) {
+  constructor(id: string, name: string, character: Character) {
     this.id = id;
     this.name = name;
-    this.color = randomColor();
     this.hand = [CardType.Flower, CardType.Flower, CardType.Flower, CardType.Skull];
     this.deck = [];
     this.point = 0;

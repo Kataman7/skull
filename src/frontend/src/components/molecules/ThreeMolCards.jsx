@@ -10,7 +10,8 @@ const ThreeMolCards = ({
   width = 0.5,
   height = 0.08,
   amount = 0,
-  name = ''
+  name = '',
+  color = '#ffffff',
 }) => {
   const groupRef = useRef()
   const { pickPlayer } = useSocketContext()
@@ -29,7 +30,7 @@ const ThreeMolCards = ({
   const cylinders = []
   for (let i = 0; i < amount; i++) {
     // Calculer la position Y de chaque cylindre dans la pile
-    const cylinderPosition = [0, i * height * 1.05, 0] // Petit chevauchement de 5%
+    const cylinderPosition = [0, i * height * 1.2, 0] // Petit chevauchement de 5%
 
     // Déterminer si c'est le cylindre du haut
     const isTopCylinder = (i === amount - 1)
@@ -43,6 +44,7 @@ const ThreeMolCards = ({
         radialSegment={12}
         isTopCylinder={isTopCylinder}
         handleClick={isTopCylinder ? handleClick : undefined}
+        color={color}
       />
     )
   }

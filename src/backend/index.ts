@@ -24,7 +24,7 @@ io.on("connection", (socket) => {
     }
 
     const character = Board.removeRandomCharacter();
-    if (character === '') {
+    if (character === null) {
       socket.emit('error', 'The game is full.');
       return;
     }
