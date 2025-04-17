@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 import { logsActions } from '../store/slices/logSlice';
 import { playerActions } from '../store/slices/playerSlice';
 
-const SERVER_URL = 'http://localhost:3001';
+const SERVER_URL = 'http://88.166.205.108:50004/';
 
 export const useSocket = () => {
   const [connected, setConnected] = useState(false);

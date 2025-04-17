@@ -2,10 +2,12 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "tsx watch index.ts"
   },
   "keywords": [],
   "author": "",
@@ -20,7 +22,10 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.1",
+    "@types/node": "^22.14.1",
     "@types/randomcolor": "^0.5.9",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.3",
+    "typescript": "^5.3.3"
   }
 }
