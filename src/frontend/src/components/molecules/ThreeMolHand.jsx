@@ -59,7 +59,7 @@ const ThreeMolHand = () => {
         cards.push(
             <ThreeAtmCard
                 key={i}
-                position={[-handSize * 0.2 + i * 0.53, 0, 0]}
+                position={[-handSize * 0.22 + i * 0.53, 0, 0]}
                 width={0.5}
                 height={0.08}
                 handleClick={handleClick}

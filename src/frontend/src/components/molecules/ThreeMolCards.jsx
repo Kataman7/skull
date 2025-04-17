@@ -30,7 +30,7 @@ const ThreeMolCards = ({
   const cylinders = []
   for (let i = 0; i < amount; i++) {
     // Calculer la position Y de chaque cylindre dans la pile
-    const cylinderPosition = [0, i * height * 1.2, 0] // Petit chevauchement de 5%
+    const cylinderPosition = [0, i * height * 1.35, 0] // Petit chevauchement de 5%
 
     // Déterminer si c'est le cylindre du haut
     const isTopCylinder = (i === amount - 1)
