@@ -45,7 +45,7 @@ const ThreeMolPlayers = () => {
                 intensity={5000}
                 angle={Math.PI / 65}
                 distance={100}
-                coneOpacity={0.11}
+                coneOpacity={0.13}
                 penumbra={0.4}
             />
             {playerData.map((data, index) => (
