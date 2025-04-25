@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  backend:
+    build: ./src/backend
+    ports:
+      - "50004:50004"
+    restart: unless-stopped
+    volumes:
+      - ./src/backend:/app
+      - /app/node_modules
+    networks:
+      - skull-network
+
+  frontend:
+    build: ./src/frontend
+    ports:
+      - "50003:5173"
+    restart: unless-stopped
+    depends_on:
+      - backend
+    volumes:
+      - ./src/frontend:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - VITE_ENV=${VITE_ENV:-dev}
+      - VITE_PROD_IP=${VITE_PROD_IP:-http://88.166.205.108}
+    networks:
+      - skull-network
+
+networks:
+  skull-network:
+    driver: bridge
