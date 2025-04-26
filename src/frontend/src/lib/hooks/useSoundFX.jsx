@@ -25,7 +25,14 @@ export function SoundFXProvider({ children }) {
     const loadedSounds = {};
     
     Object.entries(soundEffects).forEach(([key, path]) => {
+      console.log(`Trying to load sound: ${key} from path: ${path}`);
+
       const audio = new Audio();
+
+      audio.addEventListener('error', (e) => {
+        console.error(`Failed to load sound ${key}:`, e);
+      });
+
       audio.src = path;
       audio.preload = "auto";
       loadedSounds[key] = audio;
