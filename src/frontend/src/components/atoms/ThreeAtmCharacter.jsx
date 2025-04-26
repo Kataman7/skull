@@ -1,4 +1,3 @@
-import { useLoader } from "@react-three/fiber"
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader"
 import { TextureLoader } from "three"
 import { useRef, useState, useEffect } from 'react'
@@ -13,7 +12,6 @@ const ThreeAtmCharacter = ({
 }) => {
     const [model, setModel] = useState(null);
     const characterRef = useRef();
-    const ringRef = useRef();
 
     // Chargement et gestion des ressources
     useEffect(() => {

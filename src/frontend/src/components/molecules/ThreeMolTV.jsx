@@ -2,10 +2,11 @@ import { useLoader } from "@react-three/fiber";
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
 import { Suspense, useRef, useEffect, useState } from "react";
 import { Html } from "@react-three/drei";
-import { useSocketContext } from "../../lib/contexts/SocketContext";
+import { useSocketContext } from "../../lib/hooks/useSocketContext";
 import { getPlayerPositionsAndRotations } from "../../lib/helpers/utils";
 import AtmTvButton from "../atoms/AtmTvButton";
 import { useSelector } from "react-redux";
+import { useSoundFX } from "../../lib/hooks/useSoundFX";
 
 // ✅ Ajout des styles pour l'effet TV catholique
 const retroTvStyle = {
@@ -72,6 +73,7 @@ const ThreeMolTV = ({
     const [buttonVisible, setButtonVisible] = useState(false);
     const playerName = useSelector((state) => state.player.name);
     const [betValue, setBetValue] = useState(0);
+    const { play } = useSoundFX(); 
 
     // Charger le modèle TV
     const fbx = useLoader(FBXLoader, "assets/models/tvs/tv/tv.fbx");
@@ -139,17 +141,20 @@ const ThreeMolTV = ({
     const handlePlusClick = () => {
         if (betValue < countCardOnTable()) {
             setBetValue((prev) => prev + 1);
+            play('click');
         }
     }
 
     const handleMinusClick = () => {
         if (betValue > board.betValue) {
             setBetValue((prev) => prev - 1);
+            play('click');
         }
     }
 
     const handleValidClick = () => {
         placeBet(betValue);
+        play('click');
     }
 
     return (

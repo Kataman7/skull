@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { playerActions } from "../../lib/store/slices/playerSlice"
 import AtmButton from "../atoms/AtmButton"
-import { useSocketContext } from "../../lib/contexts/SocketContext"
+import { useSocketContext } from "../../lib/hooks/useSocketContext"
 import useIsMobile from "../../lib/hooks/useIsMobile"
 
 const MolGameLeave = () => {

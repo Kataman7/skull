@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useSocketContext } from '../../lib/contexts/SocketContext';
+import { useSocketContext } from '../../lib/hooks/useSocketContext';
 import { useSelector } from 'react-redux';
 
 const AtmLeaveOnUnload = () => {

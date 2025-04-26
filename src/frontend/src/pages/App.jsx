@@ -1,16 +1,19 @@
 import React from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import AppRoutes from '../routes/routes'
-import { SocketProvider } from '../lib/contexts/SocketContext'
+import { SocketProvider } from '../lib/hooks/useSocketContext'
+import { SoundFXProvider } from '../lib/hooks/useSoundFX'
 
 const App = () => {
   return (
     <SocketProvider>
-      <Router>
-        <div>
-          <AppRoutes />
-        </div>
-      </Router>
+      <SoundFXProvider>
+        <Router>
+          <div>
+            <AppRoutes />
+          </div>
+        </Router>
+      </SoundFXProvider>
     </SocketProvider>
   )
 }

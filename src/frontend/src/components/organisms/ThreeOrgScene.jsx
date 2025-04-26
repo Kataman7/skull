@@ -59,7 +59,7 @@ const ThreeOrgScene = () => {
           maxPolarAngle={Math.PI / 8}
           enableZoom={true}
           minDistance={6}
-          maxDistance={12}
+          maxDistance={30}
         />
       </Canvas>
     </div>

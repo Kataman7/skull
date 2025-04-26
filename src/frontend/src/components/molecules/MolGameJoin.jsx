@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useSocketContext } from '../../lib/contexts/SocketContext'
+import { useSocketContext } from '../../lib/hooks/useSocketContext'
 import AtmButton from '../atoms/AtmButton'
 import { playerActions } from '../../lib/store/slices/playerSlice'
 

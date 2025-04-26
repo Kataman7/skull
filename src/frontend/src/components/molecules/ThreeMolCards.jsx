@@ -1,9 +1,7 @@
 import React, { useRef, useState } from 'react'
-import { useFrame } from '@react-three/fiber'
-import * as THREE from 'three'
-import { useSelector } from 'react-redux'
 import ThreeAtmCard from '../atoms/ThreeAtmCard'
-import { useSocketContext } from '../../lib/contexts/SocketContext'
+import { useSocketContext } from '../../lib/hooks/useSocketContext'
+import { useSoundFX } from '../../lib/hooks/useSoundFX'
 
 const ThreeMolCards = ({
   position = [0, 2, 0],

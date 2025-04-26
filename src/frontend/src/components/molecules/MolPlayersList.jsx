@@ -1,4 +1,4 @@
-import { useSocketContext } from "../../lib/contexts/SocketContext"
+import { useSocketContext } from "../../lib/hooks/useSocketContext"
 import AtmList from "../atoms/AtmList"
 
 const MolPlayersList = () => {

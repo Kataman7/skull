@@ -59,7 +59,7 @@ io.on("connection", (socket) => {
 
     try {
       player.playCard(handIndex);
-      io.emit('log', `${player.name} plays a card`);
+      io.emit('log', `${player.name} plays a card.`);
       Board.playTurn();
       io.emit('board', Board.getPublicData());
     } catch (error) {

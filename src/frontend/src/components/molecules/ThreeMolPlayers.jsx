@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useSocketContext } from "../../lib/contexts/SocketContext"
+import { useSocketContext } from "../../lib/hooks/useSocketContext"
 import { getPlayerPositionsAndRotations } from "../../lib/helpers/utils"
 import ThreeAtmModel from "../atoms/ThreeAtmModel"
 import ThreeAtmSpotLight from "../atoms/ThreeAtmSpotLight"
@@ -7,12 +7,15 @@ import ThreeMolCards from "./ThreeMolCards"
 import { useDispatch } from "react-redux"
 import { playerActions } from "../../lib/store/slices/playerSlice"
 import ThreeAtmCharacter from "../atoms/ThreeAtmCharacter"
+import { useSoundFX } from "../../lib/hooks/useSoundFX"
 
 const ThreeMolPlayers = () => {
     // ✅ TOUS les hooks d'abord, avant toute condition
     const dispatch = useDispatch()
     const { board } = useSocketContext()
     const [amount, setAmount] = useState(0)
+    const [lastTurnIndex, setLastTurnIndex] = useState(0)
+    const { play } = useSoundFX()
     
     // ✅ Gestion sécurisée des cas où board est null
     const numberPlayer = board?.players?.length || 0
@@ -29,6 +32,11 @@ const ThreeMolPlayers = () => {
             dispatch(playerActions.setPosition(playerData[turnIndex].position))
             dispatch(playerActions.setRotation(playerData[turnIndex].rotation))
             setAmount(numberPlayer)
+
+            if (turnIndex !== lastTurnIndex) {
+                setLastTurnIndex(turnIndex)
+                play('spotlight')
+            }
         }
     }, [board, numberPlayer, turnIndex, playerData, dispatch])
 

@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux"
-import { useSocketContext } from "../../lib/contexts/SocketContext"
+import { useSocketContext } from "../../lib/hooks/useSocketContext"
 
 const AtmTurn = () => {
     const { board } = useSocketContext()

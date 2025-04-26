@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux"
-import { useSocketContext } from "../../lib/contexts/SocketContext"
+import { useSocketContext } from "../../lib/hooks/useSocketContext"
 import { checkIfPlayerTurn, getPlayerPositionsAndRotations } from "../../lib/helpers/utils"
 import ThreeAtmCard from "../atoms/ThreeAtmCard"
 import { useEffect, useRef, useState } from "react"
