@@ -20,6 +20,7 @@ services:
     depends_on:
       - backend
     volumes:
+      - ./src/frontend/public/assets:/app/public/assets
       - ./src/frontend:/app
       - /app/node_modules
     environment:
