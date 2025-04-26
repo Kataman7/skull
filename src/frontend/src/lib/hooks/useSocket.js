@@ -9,7 +9,7 @@ import { playerActions } from '../store/slices/playerSlice';
 const env = import.meta.env.VITE_ENV || 'dev';
 const prodIP = env === 'dev' ? 'localhost' : import.meta.env.VITE_PROD_IP || 'localhost';
 
-const SERVER_URL = `http://${prodIP}:50004/`;
+const SERVER_URL = `${prodIP}:50004/`;
 
 export const useSocket = () => {
   const [connected, setConnected] = useState(false);
