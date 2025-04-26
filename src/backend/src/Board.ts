@@ -40,6 +40,9 @@ class Board {
     }
 
     static isGameOver(): boolean {
+
+        if (this.players.length < 2) return true
+
         if (this.betValue === 0 && this.betPlayer !== null) {
             if (this.betPlayer.point > 0) return true
 
@@ -71,7 +74,7 @@ class Board {
         }
 
         if (Board.isGameOver()) {
-            const winner = this.betPlayer;
+            const winner = this.players.length < 2 ? this.players[0] : this.betPlayer;
             this.resetBoard();
             Board.lastAction = ActionType.GameOver;
             Board.winner = winner;
