@@ -33,7 +33,7 @@ export function getAssetPath(path) {
         return 'public/' + path;
     }
     else {
-        return path;
+        return '/' + path;
     }
     
 }
