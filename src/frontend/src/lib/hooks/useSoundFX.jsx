@@ -12,7 +12,7 @@ const soundEffects = {
   gunshot: "public/assets/sounds/FX/gunshot.mp3",
   denied: "public/assets/sounds/FX/denied.mp3",
   correct: "public/assets/sounds/FX/correct.mp3",
-  gameOver: "public/assets/sounds/FX/gameOver.mp3",
+  gameOver: "public/assets/sounds/FX/gameover.mp3",
 };
 
 export function SoundFXProvider({ children }) {
