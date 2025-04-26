@@ -24,3 +24,16 @@ export function checkIfPlayerTurn(board, playerName) {
     board.players[board.currentTurn] &&
     board.players[board.currentTurn].name === playerName;
 }
+
+const env = import.meta.env.VITE_ENV || 'dev';
+
+export function getAssetPath(path) {
+
+    if (env === 'dev') {
+        return 'public/' + path;
+    }
+    else {
+        return path;
+    }
+    
+}
