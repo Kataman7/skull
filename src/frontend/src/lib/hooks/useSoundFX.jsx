@@ -1,19 +1,18 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getAssetPath } from "../helpers/utils";
 
 // Créer un contexte pour exposer les fonctions de lecture d'effets sonores
 const SoundFXContext = createContext();
 
 // Liste des effets sonores avec leurs clés
 const soundEffects = {
-  click: getAssetPath("assets/sounds/fx/click.mp3"),
-  card: getAssetPath("assets/sounds/fx/card.mp3"),
-  spotlight: getAssetPath("assets/sounds/fx/spotlight.mp3"),
-  knock: getAssetPath("assets/sounds/fx/knock.mp3"),
-  gunshot: getAssetPath("assets/sounds/fx/gunshot.mp3"),
-  denied: getAssetPath("assets/sounds/fx/denied.mp3"),
-  correct: getAssetPath("assets/sounds/fx/correct.mp3"),
-  gameOver: getAssetPath("assets/sounds/fx/gameOver.mp3"),
+  click: "public/assets/sounds/fx/click.mp3",
+  card: "public/assets/sounds/fx/card.mp3",
+  spotlight: "public/assets/sounds/fx/spotlight.mp3",
+  knock: "public/assets/sounds/fx/knock.mp3",
+  gunshot: "public/assets/sounds/fx/gunshot.mp3",
+  denied: "public/assets/sounds/fx/denied.mp3",
+  correct: "public/assets/sounds/fx/correct.mp3",
+  gameOver: "public/assets/sounds/fx/gameOver.mp3",
 };
 
 export function SoundFXProvider({ children }) {
