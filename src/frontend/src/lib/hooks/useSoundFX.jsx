@@ -5,14 +5,14 @@ const SoundFXContext = createContext();
 
 // Liste des effets sonores avec leurs clés
 const soundEffects = {
-  click: "public/assets/sounds/fx/click.mp3",
-  card: "public/assets/sounds/fx/card.mp3",
-  spotlight: "public/assets/sounds/fx/spotlight.mp3",
-  knock: "public/assets/sounds/fx/knock.mp3",
-  gunshot: "public/assets/sounds/fx/gunshot.mp3",
-  denied: "public/assets/sounds/fx/denied.mp3",
-  correct: "public/assets/sounds/fx/correct.mp3",
-  gameOver: "public/assets/sounds/fx/gameOver.mp3",
+  click: "public/assets/sounds/FX/click.mp3",
+  card: "public/assets/sounds/FX/card.mp3",
+  spotlight: "public/assets/sounds/FX/spotlight.mp3",
+  knock: "public/assets/sounds/FX/knock.mp3",
+  gunshot: "public/assets/sounds/FX/gunshot.mp3",
+  denied: "public/assets/sounds/FX/denied.mp3",
+  correct: "public/assets/sounds/FX/correct.mp3",
+  gameOver: "public/assets/sounds/FX/gameOver.mp3",
 };
 
 export function SoundFXProvider({ children }) {
