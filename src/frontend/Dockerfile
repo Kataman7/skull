@@ -5,7 +5,6 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-COPY ./public/assets/sounds /app/public/assets/sounds
 COPY . .
 
 # Update for Vite host configuration

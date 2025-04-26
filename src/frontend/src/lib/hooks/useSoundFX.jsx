@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 // Créer un contexte pour exposer les fonctions de lecture d'effets sonores
 const SoundFXContext = createContext();
@@ -16,43 +16,40 @@ const soundEffects = {
 };
 
 export function SoundFXProvider({ children }) {
-  const [loaded, setLoaded] = useState(false);
-  const [sounds, setSounds] = useState({});
   const [enabled, setEnabled] = useState(true);
 
-  // Préchargement des effets sonores
-  useEffect(() => {
-    const loadedSounds = {};
-    
-    Object.entries(soundEffects).forEach(([key, path]) => {
-      console.log(`Trying to load sound: ${key} from path: ${path}`);
-
-      const audio = new Audio();
-
-      audio.addEventListener('error', (e) => {
-        console.error(`Failed to load sound ${key}:`, e);
-      });
-
-      audio.src = path;
-      audio.preload = "auto";
-      loadedSounds[key] = audio;
-    });
-    
-    setSounds(loadedSounds);
-    setLoaded(true);
-  }, []);
-
-  // Fonction pour jouer un effet sonore
+  // Fonction simplifiée pour jouer un effet sonore avec l'élément audio HTML
   const play = (soundName, volume = 1.0) => {
-    if (!enabled || !loaded) return;
+    if (!enabled) return;
     
-    const sound = sounds[soundName];
-    if (sound) {
-      const audioClone = sound.cloneNode();
-      audioClone.volume = volume;
-      audioClone.play();
-    } else {
+    const soundPath = soundEffects[soundName];
+    if (!soundPath) {
       console.warn(`Sound effect "${soundName}" not found`);
+      return;
+    }
+
+    try {
+      const audioElement = document.getElementById('sound-fx-audio');
+      if (!audioElement) return;
+
+      // Définir la source et les paramètres
+      audioElement.src = soundPath;
+      audioElement.volume = volume;
+      
+      // Écouter les erreurs
+      const errorHandler = (e) => {
+        console.error(`Error playing sound ${soundName}:`, e);
+        audioElement.removeEventListener('error', errorHandler);
+      };
+      
+      audioElement.addEventListener('error', errorHandler, { once: true });
+      
+      // Jouer le son
+      audioElement.play().catch(e => {
+        console.error('Error in play():', e);
+      });
+    } catch (error) {
+      console.error('Error in sound player:', error);
     }
   };
 
