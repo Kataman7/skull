@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import useIsMobile from "../../lib/hooks/useIsMobile";
 
 const playlist = [
     "public/assets/sounds/music/track1.mp3",
@@ -22,6 +23,9 @@ const playlist = [
 ];
 
 function AtmMusicManager() {
+
+  if (useIsMobile) return false;
+
   useEffect(() => {
     const audio = document.getElementById("global-audio");
 
