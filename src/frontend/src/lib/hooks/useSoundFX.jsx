@@ -13,6 +13,7 @@ const soundEffects = {
   denied: "public/assets/sounds/FX/denied.mp3",
   correct: "public/assets/sounds/FX/correct.mp3",
   gameOver: "public/assets/sounds/FX/gameover.mp3",
+  allin: "public/assets/sounds/FX/allin.mp3",
 };
 
 export function SoundFXProvider({ children }) {

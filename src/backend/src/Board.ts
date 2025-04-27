@@ -111,6 +111,7 @@ class Board {
             betPlayer: Board.betPlayer?.name || null,
             lastAction: Board.lastAction,
             winner: Board.winner?.name || null,
+            betMaxValue: Board.computeBetMaxValue(),
         }
 
         return datas;

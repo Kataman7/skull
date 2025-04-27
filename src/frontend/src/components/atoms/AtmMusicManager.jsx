@@ -24,9 +24,12 @@ const playlist = [
 
 function AtmMusicManager() {
 
-  if (useIsMobile) return false;
+  const isMobile = useIsMobile();
 
   useEffect(() => {
+
+    if (isMobile) return;
+
     const audio = document.getElementById("global-audio");
 
     // 🎲 Position aléatoire au démarrage
@@ -48,7 +51,7 @@ function AtmMusicManager() {
     return () => {
       audio.removeEventListener("ended", playNextTrack);
     };
-  }, []);
+  }, [isMobile]);
 
   return null;
 }
