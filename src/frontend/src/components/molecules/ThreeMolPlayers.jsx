@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux"
 import { playerActions } from "../../lib/store/slices/playerSlice"
 import ThreeAtmCharacter from "../atoms/ThreeAtmCharacter"
 import { useSoundFX } from "../../lib/hooks/useSoundFX"
+import ThreeAtmGlowLight from "../atoms/ThreeAtomGlowLight"
 
 const ThreeMolPlayers = () => {
     // ✅ TOUS les hooks d'abord, avant toute condition
@@ -16,11 +17,11 @@ const ThreeMolPlayers = () => {
     const [amount, setAmount] = useState(0)
     const [lastTurnIndex, setLastTurnIndex] = useState(0)
     const { play } = useSoundFX()
-    
+
     // ✅ Gestion sécurisée des cas où board est null
     const numberPlayer = board?.players?.length || 0
     const turnIndex = board?.currentTurn || 0
-    
+
     // ✅ Calculs sécurisés avec vérification
     const playerData = numberPlayer > 0 ? getPlayerPositionsAndRotations(numberPlayer, 4) : []
     const lightData = numberPlayer > 0 ? getPlayerPositionsAndRotations(numberPlayer, 4.2) : []
@@ -50,11 +51,18 @@ const ThreeMolPlayers = () => {
             <ThreeAtmSpotLight
                 position={[0, 25, 0]}
                 targetPosition={lightData[turnIndex].position}
-                intensity={5000}
+                intensity={2000}
                 angle={Math.PI / 65}
                 distance={100}
                 coneOpacity={0.13}
                 penumbra={0.4}
+            />
+            <ThreeAtmGlowLight
+                position={[lightData[turnIndex].position[0], lightData[turnIndex].position[1], lightData[turnIndex].position[2]]}
+                color="#f0f0f0"
+                active={true}
+                size={0}
+                intensity={100}
             />
             {playerData.map((data, index) => (
                 <ThreeAtmCharacter
