@@ -25,7 +25,8 @@ export function CharacterFactory(): Character[] {
         new Character('Man_Pot', '#F4D03F'),        // Bright Yellow (était Dark Khaki)
         new Character('Mr_Smiles', '#FF1493'),      // Deep Pink
         new Character('Blender_Head', '#9B59B6'),   // Medium Purple (était Indigo)
-        new Character('Creature', '#2ECC71')        // Emerald Green (était Dark Slate Gray)
+        new Character('Creature', '#2ECC71'),        // Emerald Green (était Dark Slate Gray)
+        new Character('Clown', '#FF4500'),        // Orange Red (était Tomato)
     ];
 }
 
