@@ -11,10 +11,10 @@ const ThreeAtmCharacter = ({
     name = "Character",
     rotation = 0,
     point = 0,
-    animation = "hand", 
+    animation = "idle", 
     playAnimation = true,
     returnToIdle = true,
-    idleAnimation = "hand"
+    idleAnimation = "victory"
 }) => {
     const [model, setModel] = useState(null);
     const [mixer, setMixer] = useState(null);
@@ -22,7 +22,6 @@ const ThreeAtmCharacter = ({
     const [currentAnimation, setCurrentAnimation] = useState(null);
     const characterRef = useRef();
     const clock = useRef(new Clock());
-    name = "Character_03"
 
     // Chargement du modèle et de ses textures
     useEffect(() => {

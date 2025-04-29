@@ -24,7 +24,7 @@ const ThreeMolPlayers = () => {
 
     // ✅ Calculs sécurisés avec vérification
     const playerData = numberPlayer > 0 ? getPlayerPositionsAndRotations(numberPlayer, 4) : []
-    const lightData = numberPlayer > 0 ? getPlayerPositionsAndRotations(numberPlayer, 4.2) : []
+    const lightData = numberPlayer > 0 ? getPlayerPositionsAndRotations(numberPlayer, 4) : []
     const cardData = numberPlayer > 0 ? getPlayerPositionsAndRotations(numberPlayer, 2) : []
 
     // ✅ useEffect avec dépendances correctes
@@ -51,18 +51,27 @@ const ThreeMolPlayers = () => {
             <ThreeAtmSpotLight
                 position={[0, 25, 0]}
                 targetPosition={lightData[turnIndex].position}
+                intensity={4000}
+                angle={Math.PI / 75}
+                distance={200}
+                coneOpacity={0}
+                penumbra={0.9}
+            />
+            <ThreeAtmSpotLight
+                position={[lightData[turnIndex].position[0], 25, lightData[turnIndex].position[2]]}
+                targetPosition={lightData[turnIndex].position}
                 intensity={2000}
-                angle={Math.PI / 65}
-                distance={100}
-                coneOpacity={0.13}
-                penumbra={0.4}
+                angle={Math.PI / 60}
+                distance={200}
+                coneOpacity={0}
+                penumbra={0.9}
             />
             <ThreeAtmGlowLight
                 position={[lightData[turnIndex].position[0], lightData[turnIndex].position[1], lightData[turnIndex].position[2]]}
                 color="#f0f0f0"
                 active={true}
                 size={0}
-                intensity={100}
+                intensity={250}
             />
             {playerData.map((data, index) => (
                 <ThreeAtmCharacter
