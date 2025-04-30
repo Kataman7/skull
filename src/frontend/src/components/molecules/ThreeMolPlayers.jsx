@@ -81,6 +81,7 @@ const ThreeMolPlayers = () => {
                     position={data.position}
                     rotation={data.rotation}
                     point={board.players[index].point}
+                    animation={board.currentTurn === index ? "victory" : "idle"}
                 />
             ))}
             {cardData.map((data, index) => (
