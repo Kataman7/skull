@@ -53,7 +53,7 @@ class Board {
                 player.recoveringDeck()
             });
             this.currentTurn--
-
+            this.lastAction = ActionType.Win
         }
         return false
     }

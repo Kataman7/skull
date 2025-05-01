@@ -12,4 +12,5 @@ export enum ActionType {
   Join = 'join',
   Leave = 'leave',
   Skip = 'skip',
+  Win = 'win',
 }

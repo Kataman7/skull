@@ -114,7 +114,6 @@ class Player {
       Board.betPlayer = null;
       Board.currentTurn -= 1;
       Board.betValue = 0;
-      Board.lastAction = ActionType.Pick;
       Board.resetPlayersSkip();
 
       Board.players.forEach(player => {

@@ -1,8 +1,18 @@
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader"
 import { TextureLoader, AnimationMixer, Clock, LoopOnce } from "three"
-import { useRef, useState, useEffect, useCallback } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import ThreeAtmGlowLight from "./ThreeAtomGlowLight";
+import { useSocketContext } from "../../lib/hooks/useSocketContext";
+
+// Liste des animations à précharger pour chaque personnage
+const PRELOAD_ANIMATIONS = [
+    "idle", 
+    "walk", 
+    "die", 
+    "victory", 
+    "defeat"
+];
 
 const ThreeAtmCharacter = ({
     position = [0, 0, 0],
@@ -13,17 +23,32 @@ const ThreeAtmCharacter = ({
     point = 0,
     animation = "idle", 
     playAnimation = true,
-    returnToIdle = true,
     idleAnimation = "idle"
 }) => {
     const [model, setModel] = useState(null);
     const [mixer, setMixer] = useState(null);
     const [animations, setAnimations] = useState({});
+    const [returnToIdle, setReturnToIdle] = useState(true);
     const [currentAnimation, setCurrentAnimation] = useState(null);
+    const {board} = useSocketContext()
+    
+    // États locaux pour les animations
+    const [currentAnimName, setCurrentAnimName] = useState(animation);
+    const [currentIdleName, setCurrentIdleName] = useState(idleAnimation);
+    
     const characterRef = useRef();
     const clock = useRef(new Clock());
 
-    // Chargement du modèle et de ses textures
+    // Synchroniser les états avec les props lorsqu'elles changent
+    useEffect(() => {
+        setCurrentAnimName(animation);
+    }, [animation]);
+    
+    useEffect(() => {
+        setCurrentIdleName(idleAnimation);
+    }, [idleAnimation]);
+
+    // Chargement du modèle et de ses textures - Utiliser les états locaux
     useEffect(() => {
         async function loadResources() {
             try {
@@ -66,53 +91,50 @@ const ThreeAtmCharacter = ({
                     if (clip.name.toLowerCase().includes("idle")) {
                         animationsMap["idle"] = clip;
                     }
-                    
-                    // Associer spécifiquement pour l'animation demandée
-                    if (clip.name.toLowerCase().includes(animation.toLowerCase())) {
-                        animationsMap[animation] = clip;
-                    }
                 });
 
-                // Charger les animations supplémentaires si nécessaire
-                try {
-                    // Chargement de l'animation spécifiée
-                    const animationPath = `/assets/models/${folder}/${name}/animations/${animation}.fbx`;
-                    console.log("Chargement animation:", animationPath);
-                    
-                    const animationModel = await new Promise((resolve, reject) => {
-                        fbxLoader.load(animationPath, resolve, undefined, reject);
-                    });
-
-                    // Ajouter les animations au mixer avec le nom exact demandé
-                    if (animationModel.animations.length > 0) {
-                        console.log(`Animation ${animation} chargée avec ${animationModel.animations.length} clips`);
-                        animationModel.animations.forEach((clip) => {
-                            animationsMap[animation] = clip; // Utiliser le nom demandé
-                            animationsMap[clip.name] = clip; // Garder aussi le nom original
+                // Fonction pour charger une animation
+                const loadAnimation = async (animName) => {
+                    try {
+                        const animPath = `/assets/models/${folder}/${name}/animations/${animName}.fbx`;
+                        console.log(`Tentative de chargement: ${animPath}`);
+                        
+                        const animModel = await new Promise((resolve, reject) => {
+                            fbxLoader.load(animPath, resolve, undefined, reject);
                         });
+                        
+                        if (animModel.animations.length > 0) {
+                            console.log(`Animation ${animName} chargée avec ${animModel.animations.length} clips`);
+                            animationsMap[animName] = animModel.animations[0];
+                            // Stocker aussi sous le nom original
+                            animModel.animations.forEach(clip => {
+                                animationsMap[clip.name] = clip;
+                            });
+                            return true;
+                        }
+                        return false;
+                    } catch (error) {
+                        console.warn(`Animation ${animName} non trouvée:`, error);
+                        return false;
                     }
-                } catch (animError) {
-                    console.warn(`Animation ${animation} non trouvée:`, animError);
+                };
+
+                // Charger toutes les animations de la liste prédéfinie
+                for (const anim of PRELOAD_ANIMATIONS) {
+                    // Vérifier si l'animation n'existe pas déjà
+                    if (!animationsMap[anim]) {
+                        await loadAnimation(anim);
+                    }
                 }
                 
-                // Charger aussi l'animation idle si différente
-                if (idleAnimation !== animation) {
-                    try {
-                        const idlePath = `/assets/models/${folder}/${name}/animations/${idleAnimation}.fbx`;
-                        console.log("Chargement idle:", idlePath);
-                        
-                        const idleModel = await new Promise((resolve, reject) => {
-                            fbxLoader.load(idlePath, resolve, undefined, reject);
-                        });
-                        
-                        if (idleModel.animations.length > 0) {
-                            console.log(`Animation ${idleAnimation} chargée avec ${idleModel.animations.length} clips`);
-                            // Associer au nom "idle" explicitement
-                            animationsMap[idleAnimation] = idleModel.animations[0];
-                        }
-                    } catch (idleError) {
-                        console.warn(`Animation idle ${idleAnimation} non trouvée:`, idleError);
-                    }
+                // S'assurer que l'animation demandée est chargée
+                if (!animationsMap[currentAnimName] && !PRELOAD_ANIMATIONS.includes(currentAnimName)) {
+                    await loadAnimation(currentAnimName);
+                }
+                
+                // S'assurer que l'animation idle est chargée
+                if (!animationsMap[currentIdleName] && !PRELOAD_ANIMATIONS.includes(currentIdleName)) {
+                    await loadAnimation(currentIdleName);
                 }
 
                 // Afficher les animations disponibles
@@ -130,31 +152,37 @@ const ThreeAtmCharacter = ({
         return () => {
             if (mixer) mixer.stopAllAction();
         };
-    }, [folder, name, animation, idleAnimation]);
+    }, [folder, name]); // Retiré animation et idleAnimation des dépendances
 
-    // Gestion des animations
+    // Gestion des animations - Utilise les états locaux
     useEffect(() => {
         if (!mixer || !animations || Object.keys(animations).length === 0) return;
         
-        console.log("Animation à jouer:", animation);
+        console.log("Animation à jouer:", currentAnimName);
         console.log("Animations disponibles:", Object.keys(animations));
         
         // Si l'animation demandée n'existe pas, chercher une animation similaire
-        let animToPlay = animation;
-        if (!animations[animation]) {
+        let animToPlay = currentAnimName;
+        if (!animations[currentAnimName]) {
             const keys = Object.keys(animations);
             for (const key of keys) {
-                if (key.toLowerCase().includes(animation.toLowerCase())) {
+                if (key.toLowerCase().includes(currentAnimName.toLowerCase())) {
                     animToPlay = key;
-                    console.log(`Animation exacte "${animation}" non trouvée, utilisation de "${key}"`);
+                    console.log(`Animation exacte "${currentAnimName}" non trouvée, utilisation de "${key}"`);
                     break;
                 }
             }
         }
         
         // Stopper l'animation actuelle
-        if (currentAnimation) {
-            currentAnimation.fadeOut(0.2);
+        if (currentAnimation && typeof currentAnimation.fadeOut === 'function') {
+            try {
+                currentAnimation.fadeOut(0.2);
+            } catch (error) {
+                console.warn("Erreur lors de l'arrêt de l'animation:", error);
+                // Forcer l'arrêt de toutes les animations en cas de problème
+                mixer.stopAllAction();
+            }
         }
         
         // Jouer la nouvelle animation
@@ -162,19 +190,19 @@ const ThreeAtmCharacter = ({
             const action = mixer.clipAction(animations[animToPlay]);
             
             // Si ce n'est pas idle, configurer pour une seule lecture
-            if (animToPlay !== idleAnimation) {
+            if (animToPlay !== currentIdleName) {
                 action.setLoop(LoopOnce);
                 action.clampWhenFinished = true;
                 
                 // Configurer le retour à idle après la fin
-                if (returnToIdle && animations[idleAnimation]) {
+                if (returnToIdle && animations[currentIdleName]) {
                     mixer.addEventListener('finished', function onFinished() {
                         mixer.removeEventListener('finished', onFinished);
                         
-                        console.log(`Animation ${animToPlay} terminée, retour à ${idleAnimation}`);
+                        console.log(`Animation ${animToPlay} terminée, retour à ${currentIdleName}`);
                         action.fadeOut(0.3);
                         
-                        const idleAction = mixer.clipAction(animations[idleAnimation]);
+                        const idleAction = mixer.clipAction(animations[currentIdleName]);
                         idleAction.reset().fadeIn(0.3).play();
                         setCurrentAnimation(idleAction);
                     });
@@ -184,9 +212,31 @@ const ThreeAtmCharacter = ({
             action.reset().fadeIn(0.2).play();
             setCurrentAnimation(action);
         } else {
-            console.warn(`Aucune animation correspondant à "${animation}" trouvée!`);
+            console.warn(`Aucune animation correspondant à "${currentAnimName}" trouvée!`);
         }
-    }, [mixer, animations, animation, playAnimation, returnToIdle, idleAnimation]);
+    }, [mixer, animations, currentAnimName, playAnimation, returnToIdle, currentIdleName]);
+
+    // Sécuriser l'accès aux données du board
+    useEffect(() => {
+        
+        
+        if (board && board.players && board.currentTurn !== undefined) {
+            
+            const currentPlayer = board.players[board.currentTurn];
+            const lastCurrentPlayer = board.players[board.currentTurn - 1 < 0 ? board.players.length - 1 : board.currentTurn - 1];
+            
+            setCurrentAnimation('victory');
+
+            if (currentPlayer.character === name) {
+                if (board.lastAction === 'win') {
+                    setCurrentAnimName('victory');
+                }
+                else if (board.lastAction === 'looseCard') {
+                    setCurrentAnimName('defeat');
+                }
+            }
+        }
+    }, [board, name]);
 
     // Mise à jour du mixer à chaque frame
     useFrame(() => {
