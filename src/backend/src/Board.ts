@@ -65,6 +65,7 @@ class Board {
         Board.betPlayer = null;
         Board.lastAction = null;
         Board.winner = null;
+        Board.characters = CharacterFactory();
     }
 
 
