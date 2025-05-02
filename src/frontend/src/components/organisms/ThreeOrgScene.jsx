@@ -24,7 +24,7 @@ const ThreeOrgScene = () => {
           filter: "contrast(1.25) saturate(1.5) brightness(1)",
         }}
       >
-        
+
         {/* Utiliser PerspectiveCamera de drei au lieu de l'objet camera */}
         <PerspectiveCamera
           makeDefault
@@ -34,7 +34,8 @@ const ThreeOrgScene = () => {
         />
 
         <ThreeAtmFloor />
-        <ambientLight intensity={0.2} />
+        <ambientLight intensity={0.1} />
+
         <directionalLight position={[5, 5, 5]} intensity={0.6} />
         <ThreeAtmSpotLight
           position={[0, 25, 0]}
@@ -50,7 +51,7 @@ const ThreeOrgScene = () => {
         <ThreeMolHand />
 
         <ThreeAtmModel folder={'tables'} name={'table'} scale={0.025} />
-        <ThreeMolTV position={[0, 1.9, -1]} scale={0.008}/>
+        <ThreeMolTV position={[0, 1.9, -1]} scale={0.008} />
 
         <OrbitControls
           ref={controlsRef}

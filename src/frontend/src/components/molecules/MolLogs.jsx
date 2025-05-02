@@ -25,7 +25,6 @@ const MolLogs = () => {
 
       if (sum > pointSum) {
         play('correct');
-        console.log('Sum of points:', sum);
       }
 
       setPointSum(sum);

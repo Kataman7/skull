@@ -97,14 +97,12 @@ const ThreeAtmCharacter = ({
                 const loadAnimation = async (animName) => {
                     try {
                         const animPath = `/assets/models/${folder}/${name}/animations/${animName}.fbx`;
-                        console.log(`Tentative de chargement: ${animPath}`);
                         
                         const animModel = await new Promise((resolve, reject) => {
                             fbxLoader.load(animPath, resolve, undefined, reject);
                         });
                         
                         if (animModel.animations.length > 0) {
-                            console.log(`Animation ${animName} chargée avec ${animModel.animations.length} clips`);
                             animationsMap[animName] = animModel.animations[0];
                             // Stocker aussi sous le nom original
                             animModel.animations.forEach(clip => {
@@ -136,9 +134,6 @@ const ThreeAtmCharacter = ({
                 if (!animationsMap[currentIdleName] && !PRELOAD_ANIMATIONS.includes(currentIdleName)) {
                     await loadAnimation(currentIdleName);
                 }
-
-                // Afficher les animations disponibles
-                console.log("Animations chargées:", Object.keys(animationsMap));
                 
                 setModel(loadedModel);
                 setAnimations(animationsMap);
@@ -157,9 +152,6 @@ const ThreeAtmCharacter = ({
     // Gestion des animations - Utilise les états locaux
     useEffect(() => {
         if (!mixer || !animations || Object.keys(animations).length === 0) return;
-        
-        console.log("Animation à jouer:", currentAnimName);
-        console.log("Animations disponibles:", Object.keys(animations));
         
         // Si l'animation demandée n'existe pas, chercher une animation similaire
         let animToPlay = currentAnimName;
@@ -199,7 +191,6 @@ const ThreeAtmCharacter = ({
                     mixer.addEventListener('finished', function onFinished() {
                         mixer.removeEventListener('finished', onFinished);
                         
-                        console.log(`Animation ${animToPlay} terminée, retour à ${currentIdleName}`);
                         action.fadeOut(0.3);
                         
                         const idleAction = mixer.clipAction(animations[currentIdleName]);

@@ -28,7 +28,6 @@ const ThreeMolHand = () => {
         // ✅ Vérification que hand n'est pas null/undefined
         if (hand) {
             setPlayerCards(hand)
-            console.log('hand', hand)
         }
     }, [hand])
 
