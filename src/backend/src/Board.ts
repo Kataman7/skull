@@ -37,6 +37,10 @@ class Board {
 
         Board.players.push(player);
         Board.lastAction = ActionType.Join;
+
+        if (Board.betPlayer !== null)
+            player.skip = true;
+
     }
 
     static isGameOver(): boolean {
