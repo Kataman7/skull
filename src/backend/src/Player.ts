@@ -45,6 +45,10 @@ class Player {
   }
 
   bet(betValue: number): boolean {
+    
+    if (!Number.isInteger(betValue))
+      throw new Error('Bet value must be an integer.');
+
     if (!this.isPlayerTurn())
       throw new Error('Not your turn to play.');
 
