@@ -89,6 +89,19 @@ class Board {
         Board.lastActionDate = new Date(Date.now());
     }
 
+    static replay(): void {
+        Board.players.forEach(player => {
+            player.reset();
+
+        });
+        Board.betValue = 0;
+        Board.betPlayer = null;
+        Board.lastAction = null;
+        Board.winner = null;
+        Board.lastActionDate = new Date(Date.now());
+        Board.currentTurn = 0;
+    }
+
 
     static playTurn(): boolean {
         if (Board.players.length === 0) {
@@ -99,6 +112,7 @@ class Board {
             const winner = this.players.length < 2 ? this.players[0] : this.betPlayer;
             Board.lastAction = ActionType.GameOver;
             Board.winner = winner;
+            winner.winCount++;
             return true;
         }
         else {
@@ -127,6 +141,7 @@ class Board {
                 point: player.point,
                 color: player.character.color,
                 isDead: player.isDead,
+                winCount: player.winCount,
             })),
             currentTurn: Board.currentTurn,
             betValue: Board.betValue,

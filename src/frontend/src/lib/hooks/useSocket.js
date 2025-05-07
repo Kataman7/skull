@@ -103,6 +103,10 @@ export const useSocket = () => {
     socketRef.current.emit('kickCurrentPlayer');
   }, []);
 
+  const replayGame = useCallback(() => {
+    socketRef.current.emit('replayGame');
+  }, []);
+
   return {
     connected,
     board,
@@ -115,5 +119,6 @@ export const useSocket = () => {
     pickPlayer,
     requestHand,
     kickCurrentPlayer,
+    replayGame,
   };
 };

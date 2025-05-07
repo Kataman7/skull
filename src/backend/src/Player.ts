@@ -11,7 +11,7 @@ class Player {
   skip: boolean = false;
   character: Character;
   isDead: boolean = false;
-
+  winCount: number = 0;
 
   constructor(id: string, name: string, character: Character) {
     this.id = id;
@@ -20,6 +20,16 @@ class Player {
     this.deck = [];
     this.point = 0;
     this.character = character;
+  }
+
+  reset(): void {
+    this.hand = [CardType.Flower, CardType.Flower, CardType.Flower, CardType.Skull];
+    this.deck = [];
+    this.point = 0;
+    this.skip = false;
+    this.isDead = false;
+    Board.characters.push(this.character);
+    this.character = Board.removeRandomCharacter();
   }
 
   isPlayerTurn(): boolean {

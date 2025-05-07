@@ -7,6 +7,7 @@ import AtmVolumeSlider from "../atoms/AtmVolumeSlider"
 import useIsMobile from "../../lib/hooks/useIsMobile"
 import { useSelector } from "react-redux"
 import MolKickButton from "../molecules/MolKickButton"
+import MolReplayButton from "../molecules/MolReplayButton"
 
 const OrgSidePannel = () => {
     const isMobile = useIsMobile();
@@ -22,6 +23,7 @@ const OrgSidePannel = () => {
                         <MolGameLeave />
                         {inGame && <AtmTurn />}
                         <MolGameJoin />
+                        <MolReplayButton />
                     </div>
                 </div>
 
@@ -46,7 +48,7 @@ const OrgSidePannel = () => {
                 </div>
                 
                 <MolPlayersList />
-
+                <MolReplayButton />
                 <MolKickButton />
                 
                 <div className="flex flex-col gap-4">

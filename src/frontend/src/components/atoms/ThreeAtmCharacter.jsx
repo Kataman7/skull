@@ -50,6 +50,18 @@ const ThreeAtmCharacter = ({
         setCurrentIdleName(idleAnimation);
     }, [idleAnimation]);
 
+    useEffect(() => {
+        if (isDead) {
+            board.players.forEach((player) => {
+                if (player.character === name && !player.isDead) {
+                    setIsDead(false);
+                    setCurrentAnimName("idle");
+                    setReturnToIdle(true);
+                }
+            });
+        }
+    }, [board]);
+
     // Chargement du modèle et de ses textures - Utiliser les états locaux
     useEffect(() => {
         async function loadResources() {

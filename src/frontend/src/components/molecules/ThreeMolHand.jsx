@@ -32,7 +32,7 @@ const ThreeMolHand = () => {
     }, [hand])
 
     // ✅ Retour précoce si les conditions ne sont pas remplies
-    if (!board || !board.players) return null
+    if (!board || !board.players || board.winner !== null) return null
     
     const player = board.players.find(player => player.name === playerName)
     

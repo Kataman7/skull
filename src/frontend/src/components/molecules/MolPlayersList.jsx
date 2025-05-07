@@ -9,7 +9,7 @@ const MolPlayersList = () => {
         <AtmList
             label='Players'
             emptyMsg='no players found'
-            items={board.players.map(player => player.name)}
+            items={board.players.map(player => player.name + (player.winCount > 0 ? ` (${player.winCount} win)` : ''))}
             maxHeight='150px'
         />
     )

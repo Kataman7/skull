@@ -179,6 +179,11 @@ io.on("connection", (socket) => {
     }
   })
 
+  socket.on("replayGame", () => {
+    Board.replay();
+    io.emit('board', Board.getPublicData());
+  })
+
 });
 
 server.listen(50004, '0.0.0.0', () => console.log("Server running on 50004"));
