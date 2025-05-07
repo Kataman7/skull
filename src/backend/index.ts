@@ -163,6 +163,22 @@ io.on("connection", (socket) => {
     socket.emit("hand", data);
   });
 
+  socket.on("kickCurrentPlayer", () => {
+
+    try {
+      let playerName = Board.kickCurrentPlayer();
+      io.emit('log', `${playerName} has been kicked from the game.`);
+      io.emit('board', Board.getPublicData());
+    }
+    catch (error) {
+      if (error instanceof Error) {
+        socket.emit('error', error.message);
+      } else {
+        socket.emit('error', 'An unknown error has occurred.');
+      }
+    }
+  })
+
 });
 
 server.listen(50004, '0.0.0.0', () => console.log("Server running on 50004"));

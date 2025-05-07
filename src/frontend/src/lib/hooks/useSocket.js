@@ -99,6 +99,10 @@ export const useSocket = () => {
     socketRef.current.emit('requestHand', playerID);
   }, []);
 
+  const kickCurrentPlayer = useCallback(() => {
+    socketRef.current.emit('kickCurrentPlayer');
+  }, []);
+
   return {
     connected,
     board,
@@ -110,5 +114,6 @@ export const useSocket = () => {
     placeBet,
     pickPlayer,
     requestHand,
+    kickCurrentPlayer,
   };
 };

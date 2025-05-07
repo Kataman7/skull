@@ -1,14 +1,14 @@
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader"
 import { TextureLoader, AnimationMixer, Clock, LoopOnce } from "three"
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, use } from 'react'
 import { useFrame } from '@react-three/fiber'
 import ThreeAtmGlowLight from "./ThreeAtomGlowLight";
 import { useSocketContext } from "../../lib/hooks/useSocketContext";
+import { useSoundFX } from "../../lib/hooks/useSoundFX";
 
 // Liste des animations à précharger pour chaque personnage
 const PRELOAD_ANIMATIONS = [
     "idle", 
-    "walk", 
     "die", 
     "victory", 
     "defeat"
@@ -31,10 +31,12 @@ const ThreeAtmCharacter = ({
     const [returnToIdle, setReturnToIdle] = useState(true);
     const [currentAnimation, setCurrentAnimation] = useState(null);
     const {board} = useSocketContext()
+    const { play } = useSoundFX();
     
     // États locaux pour les animations
     const [currentAnimName, setCurrentAnimName] = useState(animation);
     const [currentIdleName, setCurrentIdleName] = useState(idleAnimation);
+    const [isDead, setIsDead] = useState(false);
     
     const characterRef = useRef();
     const clock = useRef(new Clock());
@@ -149,6 +151,7 @@ const ThreeAtmCharacter = ({
         };
     }, [folder, name]); // Retiré animation et idleAnimation des dépendances
 
+
     // Gestion des animations - Utilise les états locaux
     useEffect(() => {
         if (!mixer || !animations || Object.keys(animations).length === 0) return;
@@ -215,16 +218,25 @@ const ThreeAtmCharacter = ({
             
             const currentPlayer = board.players[board.currentTurn];
             const lastCurrentPlayer = board.players[board.currentTurn - 1 < 0 ? board.players.length - 1 : board.currentTurn - 1];
-            
-            setCurrentAnimation('victory');
 
-            if (currentPlayer.character === name) {
+            if (currentPlayer.character === name && !currentPlayer.isDead) {
                 if (board.lastAction === 'win') {
                     setCurrentAnimName('victory');
                 }
                 else if (board.lastAction === 'looseCard') {
                     setCurrentAnimName('defeat');
                 }
+            }
+            else {
+                board.players.forEach((player, index) => {
+                    if (player.character === name && player.isDead && !isDead) {
+                        setIsDead(true);
+                        setCurrentAnimName('die');
+                        setReturnToIdle(false);
+                        play('gunshot')
+                    }
+                }
+                );
             }
         }
     }, [board, name]);

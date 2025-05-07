@@ -9,6 +9,7 @@ class Board {
     static betPlayer: Player | null = null;
     static lastAction: ActionType | null = null;
     static winner: Player | null = null;
+    static lastActionDate: Date = new Date(Date.now());
 
     static characters: Character[] = CharacterFactory();
 
@@ -36,19 +37,34 @@ class Board {
         }
 
         Board.players.push(player);
-        Board.lastAction = ActionType.Join;
+        Board.setLastAction(ActionType.Join);
 
         if (Board.betPlayer !== null)
             player.skip = true;
 
     }
 
+    static killAllTheLoosers(): void {
+        for (const player of Board.players) {
+            if (player.name !== this.betPlayer?.name) {
+                player.isDead = true;
+            }
+        }
+    }
+
     static isGameOver(): boolean {
 
         if (this.players.length < 2) return true
 
+        const deadNumber = this.players.filter(player => player.isDead).length;
+        if (this.players.length - deadNumber === 1 || this.players.length - deadNumber === 0) 
+            return true
+
         if (this.betValue === 0 && this.betPlayer !== null) {
-            if (this.betPlayer.point > 0) return true
+            if (this.betPlayer.point > 0) {
+                this.killAllTheLoosers()
+                return true
+            }
 
             this.betPlayer.point++
             this.betPlayer = null
@@ -57,7 +73,7 @@ class Board {
                 player.recoveringDeck()
             });
             this.currentTurn--
-            this.lastAction = ActionType.Win
+            this.setLastAction(ActionType.Win)
         }
         return false
     }
@@ -70,6 +86,7 @@ class Board {
         Board.lastAction = null;
         Board.winner = null;
         Board.characters = CharacterFactory();
+        Board.lastActionDate = new Date(Date.now());
     }
 
 
@@ -80,7 +97,6 @@ class Board {
 
         if (Board.isGameOver()) {
             const winner = this.players.length < 2 ? this.players[0] : this.betPlayer;
-            this.resetBoard();
             Board.lastAction = ActionType.GameOver;
             Board.winner = winner;
             return true;
@@ -94,7 +110,7 @@ class Board {
             else {
                 do {
                     Board.currentTurn = (Board.currentTurn + 1) % Board.players.length;
-                } while (Board.players[Board.currentTurn].skip);
+                } while (Board.players[Board.currentTurn].skip || Board.players[Board.currentTurn].isDead);
             }
         }
         return false;
@@ -110,6 +126,7 @@ class Board {
                 character: player.character.name,
                 point: player.point,
                 color: player.character.color,
+                isDead: player.isDead,
             })),
             currentTurn: Board.currentTurn,
             betValue: Board.betValue,
@@ -117,6 +134,7 @@ class Board {
             lastAction: Board.lastAction,
             winner: Board.winner?.name || null,
             betMaxValue: Board.computeBetMaxValue(),
+            lastDate: Board.lastActionDate,
         }
 
         return datas;
@@ -169,6 +187,33 @@ class Board {
             player.skip = false;
         }
         this.betValue = 0;
+    }
+
+    static setLastAction(action: ActionType, updateDate: boolean = true): void {
+        this.lastAction = action;
+        this.lastActionDate = new Date(Date.now());
+    }
+
+    static kickCurrentPlayer(): String {
+        if (this.players.length === 0) {
+            throw new Error('No players in the game.');
+        }
+        const currentPlayer = this.players[this.currentTurn];
+        if (currentPlayer && this.lastActionDate.getTime() < Date.now() - 60 * 1000) {
+            try {
+                return this.removePlayer(currentPlayer.id);
+            }
+            catch (error) {
+                if (error instanceof Error) {
+                    throw new Error(error.message);
+                } else {
+                    throw new Error('An unknown error has occurred.');
+                }
+            }
+        }
+        else {
+            throw new Error('The current player is not ready to be kicked.');
+        }
     }
 }
 

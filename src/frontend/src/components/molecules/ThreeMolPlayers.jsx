@@ -53,13 +53,13 @@ const ThreeMolPlayers = () => {
                 intensity={1000}
                 angle={Math.PI / 75}
                 distance={2000}
-                coneOpacity={0.15}
+                coneOpacity={0.14}
                 penumbra={0.9}
             />
             <ThreeAtmSpotLight
                 position={[lightData[turnIndex].position[0], 25, lightData[turnIndex].position[2]]}
                 targetPosition={lightData[turnIndex].position}
-                intensity={2000}
+                intensity={1000}
                 angle={Math.PI / 60}
                 distance={2000}
                 coneOpacity={0}

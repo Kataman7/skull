@@ -6,6 +6,7 @@ import AtmTurn from "../atoms/AtmTurn"
 import AtmVolumeSlider from "../atoms/AtmVolumeSlider"
 import useIsMobile from "../../lib/hooks/useIsMobile"
 import { useSelector } from "react-redux"
+import MolKickButton from "../molecules/MolKickButton"
 
 const OrgSidePannel = () => {
     const isMobile = useIsMobile();
@@ -45,6 +46,8 @@ const OrgSidePannel = () => {
                 </div>
                 
                 <MolPlayersList />
+
+                <MolKickButton />
                 
                 <div className="flex flex-col gap-4">
                     <MolLogs />

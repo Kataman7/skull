@@ -1,4 +1,3 @@
-import randomColor from 'randomcolor';
 import Board from './Board';
 import { ActionType, CardType } from './Types';
 import Character from './Character';
@@ -11,6 +10,8 @@ class Player {
   point: number;
   skip: boolean = false;
   character: Character;
+  isDead: boolean = false;
+
 
   constructor(id: string, name: string, character: Character) {
     this.id = id;
@@ -30,6 +31,9 @@ class Player {
     if (Board.players.length < 2)
       throw new Error('Not enough players to play.');
 
+    if (Board.lastAction === ActionType.GameOver)
+      throw new Error('Game is over.');
+
     if (Board.betValue > 0)
       throw new Error('You cannot play a card after betting.');
 
@@ -41,7 +45,7 @@ class Player {
 
     this.deck.push(this.hand[handIndex]);
     this.hand.splice(handIndex, 1);
-    Board.lastAction = ActionType.PlayCard;
+    Board.setLastAction(ActionType.PlayCard);
   }
 
   bet(betValue: number): boolean {
@@ -61,7 +65,7 @@ class Player {
     if (betValue > Board.betValue) {
       Board.betValue = betValue;
       Board.betPlayer = this;
-      Board.lastAction = ActionType.Bet;
+      Board.setLastAction(ActionType.Bet);
       return true;
     }
     return false;
@@ -76,11 +80,11 @@ class Player {
 
     const randomIndex = Math.floor(Math.random() * this.hand.length);
     this.hand.splice(randomIndex, 1);
-    Board.lastAction = ActionType.LooseCard;
+    Board.setLastAction(ActionType.LooseCard);
     Board.resetPlayersSkip();
 
     if (this.hand.length === 0) {
-      Board.removePlayer(this.id);
+      this.isDead = true;
     }
   }
 
@@ -110,7 +114,7 @@ class Player {
 
     if (pickedCard === CardType.Flower) {
       Board.betValue -= 1;
-      Board.lastAction = ActionType.Pick;
+      Board.setLastAction(ActionType.Pick);
       return true;
     }
     else {
