@@ -38,7 +38,7 @@ class Player {
 
   playCard(handIndex: number): void {
 
-    if (Board.players.length < 2)
+    if (Board.nbPlayerAlive() < 2)
       throw new Error('Not enough players to play.');
 
     if (Board.lastAction === ActionType.GameOver)

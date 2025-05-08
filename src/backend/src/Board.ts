@@ -102,6 +102,10 @@ class Board {
         Board.currentTurn = 0;
     }
 
+    static nbPlayerAlive(): number {
+        return Board.players.filter(player => !player.isDead).length;
+    }
+
 
     static playTurn(): boolean {
         if (Board.players.length === 0) {
