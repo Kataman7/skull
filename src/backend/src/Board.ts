@@ -113,7 +113,7 @@ class Board {
         }
 
         if (Board.isGameOver()) {
-            const winner = this.players.length < 2 ? this.players[0] : this.betPlayer;
+            const winner = this.players.filter(p => !p.isDead).length < 2 ? this.players.find(p => !p.isDead) : this.betPlayer;
             Board.lastAction = ActionType.GameOver;
             Board.winner = winner;
             winner.winCount++;
@@ -147,7 +147,7 @@ class Board {
                 isDead: player.isDead,
                 winCount: player.winCount,
             })),
-            currentTurn: Board.currentTurn,
+            currentTurn: Board.currentTurn < 0 ? 0 : Board.currentTurn,
             betValue: Board.betValue,
             betPlayer: Board.betPlayer?.name || null,
             lastAction: Board.lastAction,

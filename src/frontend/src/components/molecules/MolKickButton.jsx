@@ -1,10 +1,12 @@
 import AtmButton from "../atoms/AtmButton";
 import { useSocketContext } from '../../lib/hooks/useSocketContext';
 import { useEffect, useState } from "react";
+import useIsMobile from "../../lib/hooks/useIsMobile";
 
 const MolKickButton = () => {
     const { board, kickCurrentPlayer } = useSocketContext();
     const [isDisabled, setIsDisabled] = useState(true);
+    const isMobile = useIsMobile();
 
     const handleClick = () => {
         if (!board) return;
@@ -29,6 +31,8 @@ const MolKickButton = () => {
         const interval = setInterval(checkDisabled, 1_000);
         return () => clearInterval(interval);
     }, [board]);
+
+    if (isMobile && isDisabled) return null;
 
     return (
         <AtmButton

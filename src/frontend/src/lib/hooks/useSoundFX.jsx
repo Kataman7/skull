@@ -19,7 +19,7 @@ const soundEffects = {
 export function SoundFXProvider({ children }) {
   const [enabled, setEnabled] = useState(true);
 
-  // Fonction simplifiée pour jouer un effet sonore avec l'élément audio HTML
+  // Fonction modifiée pour jouer un effet sonore avec création dynamique d'éléments audio
   const play = (soundName, volume = 1.0) => {
     if (!enabled) return;
     
@@ -30,11 +30,10 @@ export function SoundFXProvider({ children }) {
     }
 
     try {
-      const audioElement = document.getElementById('sound-fx-audio');
-      if (!audioElement) return;
-
-      // Définir la source et les paramètres
-      audioElement.src = soundPath;
+      // Créer un nouvel élément audio pour chaque son
+      const audioElement = new Audio(soundPath);
+      
+      // Définir le volume
       audioElement.volume = volume;
       
       // Écouter les erreurs
@@ -44,6 +43,11 @@ export function SoundFXProvider({ children }) {
       };
       
       audioElement.addEventListener('error', errorHandler, { once: true });
+      
+      // Nettoyer l'élément une fois la lecture terminée
+      audioElement.addEventListener('ended', () => {
+        audioElement.remove(); // Libérer les ressources
+      }, { once: true });
       
       // Jouer le son
       audioElement.play().catch(e => {

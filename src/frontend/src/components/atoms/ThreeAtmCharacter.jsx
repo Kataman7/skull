@@ -242,10 +242,17 @@ const ThreeAtmCharacter = ({
             else {
                 board.players.forEach((player, index) => {
                     if (player.character === name && player.isDead && !isDead) {
-                        setIsDead(true);
-                        setCurrentAnimName('die');
-                        setReturnToIdle(false);
-                        play('gunshot')
+
+                        setTimeout(() => {
+
+                            setIsDead(true);
+                            setCurrentAnimName('die');
+                            setReturnToIdle(false);
+
+                            setTimeout(() => {
+                                play('gunshot')
+                            }, 500);
+                        }, Math.random() * 500);
                     }
                 }
                 );

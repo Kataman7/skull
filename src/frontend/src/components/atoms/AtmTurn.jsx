@@ -9,8 +9,12 @@ const AtmTurn = () => {
     const player = board.players[board.currentTurn]
     if (!player) return null
 
+    if (board.winner) return (
+        <h3 className="text-2xl font-semibold"> {board.winner} won! </h3>
+    )
+
     return (
-        <h3 className="text-lg font-semibold"> {playerName === player.name ? 'Your' : `${player.name}'`} turn. </h3>
+        <h3 className="text-2xl font-semibold"> {playerName === player.name ? 'Your' : `${player.name}'`} turn. </h3>
     )
 }
 

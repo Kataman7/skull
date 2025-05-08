@@ -5,41 +5,46 @@ import ThreeAtmCard from "../atoms/ThreeAtmCard"
 import { useEffect, useRef, useState } from "react"
 
 const ThreeMolHand = () => {
+    // 1. PLACE ALL HOOKS AT THE TOP
     const { board, playCard, requestHand, hand } = useSocketContext()
+    const playerName = useSelector((state) => state.player.name)
     const [displayHand, setDisplayHand] = useState(false)
-    const [playerCards, setPlayerCards] = useState([]) // ✅ Initialisation avec un tableau vide
+    const [playerCards, setPlayerCards] = useState([])
     const groupRef = useRef()
 
-    // Données du joueur
-    const playerName = useSelector((state) => state.player.name)
-
+    // 2. CALCULATE DATA THAT DOESN'T DEPEND ON CONDITIONALS
+    const player = board?.players?.find(player => player.name === playerName)
+    const currentPlayer = board?.players ? board.players[board?.currentTurn] : null
+    const handSize = currentPlayer && typeof currentPlayer.hand === 'number' && currentPlayer.hand > 0 ? currentPlayer.hand : 0
+    const isMyTurn = checkIfPlayerTurn(board, playerName)
+    
+    // 3. DEFINE ALL EFFECTS
     useEffect(() => {
         if (board &&
             board.betPlayer?.name === board.currentPlayer?.name &&
             board.betValue === 0
         ) {
-            requestHand()
+            if (isMyTurn) {
+                requestHand()
+            }
             setDisplayHand(true)
         }
         else setDisplayHand(false)
-    }, [board, requestHand])
+    }, [board, requestHand, isMyTurn])
 
     useEffect(() => {
-        // ✅ Vérification que hand n'est pas null/undefined
-        if (hand) {
+        if (hand && isMyTurn) {
             setPlayerCards(hand)
         }
-    }, [hand])
+    }, [hand, isMyTurn])
 
-    // ✅ Retour précoce si les conditions ne sont pas remplies
+    // 4. EARLY RETURNS AFTER ALL HOOKS
     if (!board || !board.players || board.winner !== null) return null
-    
-    const player = board.players.find(player => player.name === playerName)
-    
-    // ✅ Vérification supplémentaire pour player
-    if (!player) return null
-    if (!checkIfPlayerTurn(board, playerName)) return null
+    if (!currentPlayer) return null
+    // Remove the player turn check to show cards for all players
+    if (isMyTurn && playerCards.length !== handSize) return null
 
+    // 5. RENDERING LOGIC
     const datas = getPlayerPositionsAndRotations(board.players.length, 1.7)
     const playerPosition = datas[board.currentTurn].position
     const playerRotation = datas[board.currentTurn].rotation
@@ -47,12 +52,11 @@ const ThreeMolHand = () => {
 
     const cards = [];
 
-    // ✅ Vérification que player.hand est un nombre valide
-    const handSize = typeof player.hand === 'number' && player.hand > 0 ? player.hand : 0;
-
     for (let i = 0; i < handSize; i++) {
         const handleClick = () => {
-            playCard(i)
+            if (isMyTurn) {
+                playCard(i)
+            }
         }
 
         cards.push(
@@ -61,11 +65,12 @@ const ThreeMolHand = () => {
                 position={[-handSize * 0.22 + i * 0.53, 0, 0]}
                 width={0.5}
                 height={0.08}
-                handleClick={handleClick}
-                isTopCylinder={true}
+                handleClick={isMyTurn ? handleClick : undefined}
+                isTopCylinder={isMyTurn}
                 rotation={[2.8, 0, 0]}
-                color={player.color}
-                type={playerCards && i < playerCards.length ? playerCards[i] : null}
+                color={currentPlayer.color}
+                // Only show card type if it's the current player's hand
+                type={isMyTurn && playerCards && i < playerCards.length ? playerCards[i] : 'flower'}
             />
         )
     }

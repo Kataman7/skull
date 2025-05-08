@@ -18,12 +18,16 @@ const OrgSidePannel = () => {
         return (
             <>
                 {/* Panneau du haut avec les contrôles de jeu */}
-                <div className="fixed top-0 left-0 w-full py-3 bg-black/50 flex justify-center">
+                <div className="fixed top-0 left-0 w-full py-3 bg-black/50 flex justify-between px-4">   
                     <div className="flex flex-row gap-4">
+                        {!inGame && <p className="text-2xl">Skull</p>}
                         <MolGameLeave />
+                        <div><MolKickButton /></div>
+                    </div>
+                    <div className="flex flex-row gap-4">
                         {inGame && <AtmTurn />}
                         <MolGameJoin />
-                        <MolReplayButton />
+                        {inGame && <MolReplayButton />}
                     </div>
                 </div>
 
@@ -46,11 +50,11 @@ const OrgSidePannel = () => {
                     <AtmTurn />
                     <MolGameJoin />
                 </div>
-                
+
                 <MolPlayersList />
-                <MolReplayButton />
+                {inGame && <MolReplayButton />}
                 <MolKickButton />
-                
+
                 <div className="flex flex-col gap-4">
                     <MolLogs />
                     <AtmVolumeSlider />

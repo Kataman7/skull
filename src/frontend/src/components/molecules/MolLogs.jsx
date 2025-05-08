@@ -56,7 +56,7 @@ const MolLogs = () => {
           play('gameOver');
         }
         else if (messageText.includes('bet ' + board.betMaxValue)) {
-          play('allin');
+          play('allin', 0.5);
         }
 
 
